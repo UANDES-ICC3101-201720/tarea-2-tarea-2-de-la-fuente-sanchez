@@ -56,6 +56,7 @@ int main( int argc, char *argv[] )
 	manejar las faltas. Quizas usar pt como variable global pueda ayudar, aun que puede que solo baste con
 	condicionar la inicializacion en base a la variable algorithm
 	*/
+
 	if(!pt) {
 		fprintf(stderr,"couldn't create page table: %s\n",strerror(errno));
 		return 1;
@@ -63,7 +64,7 @@ int main( int argc, char *argv[] )
 
 	char *virtmem = page_table_get_virtmem(pt);
 
-	//char *physmem = page_table_get_physmem(pt);
+	char *physmem = page_table_get_physmem(pt);
 
 	if(!strcmp(program,"sort")) {
 		sort_program(virtmem,npages*PAGE_SIZE);
@@ -78,32 +79,42 @@ int main( int argc, char *argv[] )
 		fprintf(stderr,"unknown program: %s\n",argv[3]);
 
 	}
+	printf("==========page_table==========\n");
+	page_table_print(pt);
+	printf("==========page_table==========\n");
 
 	page_table_delete(pt);
 	disk_close(disk);
 
 	return 0;
+	//printf("read: %d, write: %d, exec: %d\n", PROT_READ, PROT_WRITE, PROT_EXEC );
 }
 
-
+int cnt = 0;
 //esta entrando bien aca cuando hay faltas de paginas
 void page_fault_handler( struct page_table *pt, int page ) {
-	/* 
-	ignorame
-	if (npages == nframes) {
-		printf("hola\n");
-	}
-	if (npages > nframes)
-	{
-		printf("hola2\n");
-	} 
-	ignorame
-	*/
-	printf("entra a page_fault_handler:\n");
-	page_table_set_entry(pt, page, 0, PROT_READ); //ese 0 en realidad debiera ser el marco que esa pagina quiere ocupar
+	cnt++;
+	printf("page: %d\n", page);
+	int *frame = malloc(sizeof(int));
+	int *bits = malloc(sizeof(int));
+	page_table_get_entry(pt, page, frame, bits);
+	printf("[before set_entry] frame: %d, bits: %d\n", *frame, *bits);
+	
 	char *physmem = page_table_get_physmem(pt);
-	disk_read(disk, page, &physmem[0*PAGE_SIZE]); //aca hay un error, ese 0 es el mismo del page_table_set_entry
-	printf("error aca\n");
-	exit(1);
+
+	page_table_set_entry(pt, page, *frame, *bits); //ese 0 en realidad debiera ser el marco que esa pagina quiere ocupar
+
+	page_table_print(pt);
+
+	page_table_get_entry(pt, page, frame, bits);
+	printf("[after set_entry] frame: %d, bits: %d\n", *frame, *bits);
+
+	printf("error abajo de este mensaje\n");
+	disk_write(disk, page, &physmem[*frame*BLOCK_SIZE]); //aca hay un error, ese 0 es el marco
+	free(frame);
+	free(bits);
+	if (cnt == 3) {
+		exit(1);
+	}
 	
 }
