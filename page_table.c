@@ -5,7 +5,7 @@ Make all of your changes to main.c instead.
 */
 
 #define _GNU_SOURCE
-
+#include <signal.h>
 #include <sys/types.h>
 #include <unistd.h>
 #include <sys/mman.h>
