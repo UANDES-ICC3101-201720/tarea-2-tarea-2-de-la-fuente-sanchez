@@ -5,7 +5,6 @@ Make all of your changes to main.c instead.
 */
 
 #define _GNU_SOURCE
-#include <signal.h>
 #include <sys/types.h>
 #include <unistd.h>
 #include <sys/mman.h>
@@ -14,7 +13,7 @@ Make all of your changes to main.c instead.
 #include <fcntl.h>
 #include <stdlib.h>
 #include <ucontext.h>
-
+#include <signal.h>
 #include "page_table.h"
 
 struct page_table {
