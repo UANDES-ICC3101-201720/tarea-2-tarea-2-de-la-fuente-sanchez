@@ -15,9 +15,8 @@ how to use the page table and disk interfaces.
 #include <string.h>
 #include <errno.h>
 
-int npages;
-int nframes;
 struct disk *disk;
+int *frames;
 
 /*
 se delcaran aca y se definen mas abajo para que el copilador no joda con variables usadas que 
@@ -38,6 +37,7 @@ int main( int argc, char *argv[] )
 	/* Aca podemos dejarlo asi o hacer getopt */
 	int npages = atoi(argv[1]);
 	int nframes = atoi(argv[2]);
+	frames = malloc(sizeof(int) * nframes);
 	const char *algorithm = argv[3]; //este es el algoritmo a ocupar
 	const char *program = argv[4];
 
@@ -50,6 +50,11 @@ int main( int argc, char *argv[] )
 
 
 	struct page_table *pt = page_table_create(npages, nframes, page_fault_handler);
+	
+	char *virtmem = page_table_get_virtmem(pt);
+	char *physmem = page_table_get_physmem(pt);
+	
+
 	/*
 	Hay que manejar la cracion de la tabla de pagina segun el algoritmo que se vaya a usar,
 	en la parte page_table_create el ultimo argumento es el algoritmo que va a usar la pagina para
@@ -62,9 +67,6 @@ int main( int argc, char *argv[] )
 		return 1;
 	}
 
-	char *virtmem = page_table_get_virtmem(pt);
-
-	char *physmem = page_table_get_physmem(pt);
 
 	if(!strcmp(program,"sort")) {
 		sort_program(virtmem,npages*PAGE_SIZE);
@@ -86,35 +88,50 @@ int main( int argc, char *argv[] )
 	page_table_delete(pt);
 	disk_close(disk);
 
+	free(frames);
+
 	return 0;
 	//printf("read: %d, write: %d, exec: %d\n", PROT_READ, PROT_WRITE, PROT_EXEC );
 }
 
+
 int cnt = 0;
 //esta entrando bien aca cuando hay faltas de paginas
 void page_fault_handler( struct page_table *pt, int page ) {
-	cnt++;
-	printf("page: %d\n", page);
 	int *frame = malloc(sizeof(int));
 	int *bits = malloc(sizeof(int));
+	printf("page: %d\n", page);
+	//printf("%d\n", random_frame);
 	page_table_get_entry(pt, page, frame, bits);
-	printf("[before set_entry] frame: %d, bits: %d\n", *frame, *bits);
-	
-	char *physmem = page_table_get_physmem(pt);
+	int nframes = page_table_get_nframes(pt);
+	int random_frame = lrand48() % nframes;
 
-	page_table_set_entry(pt, page, *frame, *bits); //ese 0 en realidad debiera ser el marco que esa pagina quiere ocupar
 
-	page_table_print(pt);
-
-	page_table_get_entry(pt, page, frame, bits);
-	printf("[after set_entry] frame: %d, bits: %d\n", *frame, *bits);
-
-	printf("error abajo de este mensaje\n");
-	disk_write(disk, page, &physmem[*frame*BLOCK_SIZE]); //aca hay un error, ese 0 es el marco
-	free(frame);
-	free(bits);
-	if (cnt == 3) {
-		exit(1);
+	//printf("bits: %d\n", bits[0]);
+	if (cnt == page && cnt < nframes) {
+		page_table_set_entry(pt, page, page, PROT_READ | PROT_WRITE | PROT_EXEC);
+		frames[cnt] = page;
+		cnt++;
 	}
-	
+	if (cnt >= nframes && bits[0] == 0) {
+		printf("[before set_entry] frame: %d, bits: %d\n", frame[0], bits[0]);
+
+		char *physmem = page_table_get_physmem(pt);
+
+
+		printf("frames[%d]: %d\n", random_frame, frames[random_frame]);
+		disk_write(disk, frames[random_frame], &physmem[random_frame*PAGE_SIZE]); //pagina que ocupa el marco
+		disk_read(disk, page, &physmem[random_frame*BLOCK_SIZE]); //pagina que quiere ocupar el marco		
+		
+		frames[random_frame] = page;
+		page_table_set_entry(pt, page, random_frame, PROT_READ | PROT_WRITE | PROT_EXEC);
+
+
+		page_table_get_entry(pt, page, frame, bits);
+		printf("[after set_entry] frame: %d, bits: %d\n", *frame, *bits);
+
+	}
+
+	free(frame);
+	free(bits);	
 }
