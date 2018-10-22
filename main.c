@@ -118,6 +118,7 @@ const char *algorithm;
 se delcaran aca y se definen mas abajo para que el copilador no joda con variables usadas que 
 pudieran no estar inicializadas
 */
+
 void page_fault_handler( struct page_table *pt, int page);
 void page_fault_handler_custom( struct page_table *pt, int page );
 void page_fault_handler_rand( struct page_table *pt, int page);
@@ -149,8 +150,12 @@ int main( int argc, char *argv[] )
 	algorithm = argv[3]; //este es el algoritmo a ocupar
 	const char *program = argv[4];
 
+<<<<<<< HEAD
 	stack = createStack(nframes);
 	queue = createQueue(nframes);
+=======
+	stack = createStack(nframes + 1);
+>>>>>>> ec0477165906d87dfb98eac4336ff0e10f123b43
 
 	disk = disk_open("myvirtualdisk",npages);
 	if(!disk) {
@@ -163,7 +168,7 @@ int main( int argc, char *argv[] )
 	
 	
 	char *virtmem = page_table_get_virtmem(pt);
-	char *physmem = page_table_get_physmem(pt);
+	//char *physmem = page_table_get_physmem(pt);
 
 
 	if(!strcmp(program,"sort")) {
@@ -179,10 +184,12 @@ int main( int argc, char *argv[] )
 		fprintf(stderr,"unknown program: %s\n",argv[3]);
 
 	}
-	printf("==========page_table==========\n");
+	
+	printf("============page_table============\n");
 	page_table_print(pt);
-	printf("==========page_table==========\n");
-
+	printf("============page_table============\n");
+	
+	printf("%d,%d,%d,%d\n", nframes, n_writes, n_reads, n_page_faults);
 	page_table_delete(pt);
 	disk_close(disk);
 
@@ -251,8 +258,11 @@ void page_fault_handler_rand( struct page_table *pt, int page ) {
 void page_fault_handler_fifo(struct page_table *pt, int page) {
 	int *frame = malloc(sizeof(int));
 	int *bits = malloc(sizeof(int));
+<<<<<<< HEAD
 	int nframes = page_table_get_nframes(pt);
 	printf("page: %d\n", page);
+=======
+>>>>>>> ec0477165906d87dfb98eac4336ff0e10f123b43
 
 	page_table_get_entry(pt, page, frame, bits);
 
@@ -281,13 +291,12 @@ void page_fault_handler_custom(struct page_table *pt, int page) {
 
 	char *physmem = page_table_get_physmem(pt);
 	int last_used_frame = pop(stack);
-	printf("last_used_frame: %d\n", last_used_frame);
 	if (last_used_frame == last_fault) {
-		last_used_frame = pop(stack) + 1;
-		printf("last_used_frame next: %d\n", last_used_frame);
+		int nframes = page_table_get_nframes(pt);
+		last_used_frame = lrand48() % nframes;
 	}
 
-	push(stack, *frame);
+	push(stack, last_used_frame);
 	disk_write(disk, frames[last_used_frame], &physmem[last_used_frame*PAGE_SIZE]); //pagina que ocupa el marco
 	n_writes++;
 	disk_read(disk, page, &physmem[last_used_frame*BLOCK_SIZE]); //pagina que quiere ocupar el marco		

@@ -16,4 +16,4 @@ program.o: program.c
 
 
 clean:
-	rm -f *.o virtmem
+	rm -f *.o virtmem *.txt
