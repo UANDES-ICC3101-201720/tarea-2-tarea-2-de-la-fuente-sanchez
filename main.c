@@ -16,6 +16,7 @@ how to use the page table and disk interfaces.
 #include <errno.h>
 #include <limits.h>
 
+
 struct Stack { 
     int top; 
     unsigned capacity; 
@@ -50,6 +51,59 @@ int pop(struct Stack* stack) {
     return stack->array[stack->top--]; 
 }
 
+struct Queue{
+	int front, rear, size;
+	unsigned capacity;
+	int *array;
+};
+
+struct Queue* createQueue(unsigned capacity){
+	struct Queue* queue = (struct Queue*) malloc(sizeof(struct Queue));
+	queue->capacity = capacity;
+	queue->front = queue->size = 0;
+	queue->rear = capacity - 1;
+	queue->array = (int*) malloc(queue->capacity * sizeof(int));
+	return queue;
+}
+
+int QueueIsFull(struct Queue* queue){
+	return (queue->size == queue->capacity);
+}
+
+int QueueIsEmpty(struct Queue* queue){
+	return (queue->size == 0);
+}
+
+void enqueue(struct Queue* queue, int item){
+	if (QueueIsFull(queue))
+		return;
+	queue->rear = (queue->rear + 1)%queue->capacity; 
+    queue->array[queue->rear] = item; 
+    queue->size = queue->size + 1; 
+	printf("%d enqueued to queue\n", item); 
+	return;
+}
+
+int dequeue(struct Queue* queue){
+	if (QueueIsEmpty(queue))
+		return INT_MIN;
+	int item = queue->array[queue->front];
+	queue->front = (queue->front + 1)%queue->capacity;
+	queue->size = queue->size + 1;
+	return item;
+}
+
+int front(struct Queue* queue){
+	if (QueueIsEmpty(queue))
+		return INT_MIN;
+	return queue->array[queue->front];
+}
+
+int rear(struct Queue* queue){
+	if (QueueIsEmpty)
+		return INT_MIN;
+	return queue->array[queue->rear];
+}
 
 struct disk *disk;
 int *frames; // el indice es el marco y el contenido la pagina que lo esta usando
@@ -57,7 +111,9 @@ int n_writes; // cuantas veces escribe en el disco
 int n_reads; // cuantas veces lee del disco
 int n_page_faults; // numero de faltas de pagina
 struct Stack *stack; // para implementar el algortimo custom
+struct Queue *queue;
 const char *algorithm;
+
 /*
 se delcaran aca y se definen mas abajo para que el copilador no joda con variables usadas que 
 pudieran no estar inicializadas
@@ -65,7 +121,7 @@ pudieran no estar inicializadas
 void page_fault_handler( struct page_table *pt, int page);
 void page_fault_handler_custom( struct page_table *pt, int page );
 void page_fault_handler_rand( struct page_table *pt, int page);
-void page_fault_handler_FIFO( struct page_table *pt, int page);
+void page_fault_handler_fifo( struct page_table *pt, int page);
 
 /* para manejar el error en caso de que fallara la creacion de la tabla */
 void check_page_table(struct page_table *pt) {
@@ -74,7 +130,6 @@ void check_page_table(struct page_table *pt) {
 		exit(-1);
 	}
 }
-
 
 int main( int argc, char *argv[] )
 {
@@ -95,6 +150,7 @@ int main( int argc, char *argv[] )
 	const char *program = argv[4];
 
 	stack = createStack(nframes);
+	queue = createQueue(nframes);
 
 	disk = disk_open("myvirtualdisk",npages);
 	if(!disk) {
@@ -146,6 +202,7 @@ void page_fault_handler( struct page_table *pt, int page) {
 
 	if (cnt == page && cnt < n_frames) {
 		push(stack, *frame);
+		enqueue(queue, *frame);
 		page_table_set_entry(pt, page, page, PROT_READ | PROT_WRITE);
 		frames[cnt] = page;
 		cnt++;
@@ -157,7 +214,7 @@ void page_fault_handler( struct page_table *pt, int page) {
 			page_fault_handler_rand(pt, page);
 			
 		} else if (!strcmp(algorithm, "fifo")) {
-			page_fault_handler_FIFO(pt, page);
+			page_fault_handler_fifo(pt, page);
 			
 		} else if (!strcmp(algorithm, "custom")) {
 			page_fault_handler_custom(pt, page);
@@ -191,16 +248,30 @@ void page_fault_handler_rand( struct page_table *pt, int page ) {
 	free(bits);	
 }
 
-void page_fault_handler_FIFO(struct page_table *pt, int page) {
+void page_fault_handler_fifo(struct page_table *pt, int page) {
 	int *frame = malloc(sizeof(int));
 	int *bits = malloc(sizeof(int));
+	int nframes = page_table_get_nframes(pt);
 	printf("page: %d\n", page);
 
-	/* reemplazo de pagina fifo */
+	page_table_get_entry(pt, page, frame, bits);
+
+	char *physmem = page_table_get_physmem(pt);
+	int first_used_frame = dequeue(queue);
+	printf("first_used_frame: %d\n", first_used_frame);
+	enqueue(queue, first_used_frame);
+
+	push(stack, *frame);
+	disk_write(disk, frames[first_used_frame], &physmem[first_used_frame*PAGE_SIZE]); //pagina que ocupa el marco
+	n_writes++;
+	disk_read(disk, page, &physmem[first_used_frame*BLOCK_SIZE]); //pagina que quiere ocupar el marco		
+	n_reads++;
+	frames[first_used_frame] = page;
+	page_table_set_entry(pt, page, first_used_frame, PROT_READ | PROT_WRITE);
+	page_table_get_entry(pt, page, frame, bits);
 
 	free(frame);
 	free(bits);
-
 }
 
 void page_fault_handler_custom(struct page_table *pt, int page) {
@@ -228,5 +299,4 @@ void page_fault_handler_custom(struct page_table *pt, int page) {
 	last_fault = last_used_frame;
 	free(frame);
 	free(bits);	
-
 }
