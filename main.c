@@ -150,13 +150,9 @@ int main( int argc, char *argv[] )
 	algorithm = argv[3]; //este es el algoritmo a ocupar
 	const char *program = argv[4];
 
-<<<<<<< HEAD
-	stack = createStack(nframes);
-	queue = createQueue(nframes);
-=======
+	queue = createQueue(nframes + 1);	
 	stack = createStack(nframes + 1);
->>>>>>> ec0477165906d87dfb98eac4336ff0e10f123b43
-
+	
 	disk = disk_open("myvirtualdisk",npages);
 	if(!disk) {
 		fprintf(stderr,"couldn't create virtual disk: %s\n",strerror(errno));
@@ -258,11 +254,8 @@ void page_fault_handler_rand( struct page_table *pt, int page ) {
 void page_fault_handler_fifo(struct page_table *pt, int page) {
 	int *frame = malloc(sizeof(int));
 	int *bits = malloc(sizeof(int));
-<<<<<<< HEAD
 	int nframes = page_table_get_nframes(pt);
 	printf("page: %d\n", page);
-=======
->>>>>>> ec0477165906d87dfb98eac4336ff0e10f123b43
 
 	page_table_get_entry(pt, page, frame, bits);
 
