@@ -46,7 +46,7 @@ nframes = []
 n_writes = []
 n_reads = []
 n_page_faults = []
-for data in data_files["fifo-sort.txt"]:
+for data in data_files["custom-sort.txt"]:
 	nframes.append(data[0])
 	n_writes.append(data[1])
 	n_reads.append(data[2])
