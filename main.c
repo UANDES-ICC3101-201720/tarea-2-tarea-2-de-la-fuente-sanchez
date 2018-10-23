@@ -260,13 +260,14 @@ void page_fault_handler_fifo(struct page_table *pt, int page) {
 		return;
 	}
 	//printf("page: %d\n", page);
-	
+
 	page_table_get_entry(pt, page, frame, bits);
 
 	char *physmem = page_table_get_physmem(pt);
 	int first_used_frame = dequeue(queue);
 	//printf("first_used_frame: %d\n", first_used_frame);
 	enqueue(queue, first_used_frame);
+	int the_page = frames[first_used_frame];
 
 	push(stack, *frame);
 	disk_write(disk, frames[first_used_frame], &physmem[first_used_frame*PAGE_SIZE]); //pagina que ocupa el marco
@@ -274,6 +275,7 @@ void page_fault_handler_fifo(struct page_table *pt, int page) {
 	disk_read(disk, page, &physmem[first_used_frame*BLOCK_SIZE]); //pagina que quiere ocupar el marco		
 	n_reads++;
 	frames[first_used_frame] = page;
+	page_table_set_entry(pt, the_page, first_used_frame, 0);
 	page_table_set_entry(pt, page, first_used_frame, PROT_READ | PROT_WRITE);
 	page_table_get_entry(pt, page, frame, bits);
 
