@@ -80,7 +80,7 @@ void enqueue(struct Queue* queue, int item){
 	queue->rear = (queue->rear + 1)%queue->capacity; 
     queue->array[queue->rear] = item; 
     queue->size = queue->size + 1; 
-	printf("%d enqueued to queue\n", item); 
+	//printf("%d enqueued to queue\n", item); 
 	return;
 }
 
@@ -150,7 +150,7 @@ int main( int argc, char *argv[] )
 	algorithm = argv[3]; //este es el algoritmo a ocupar
 	const char *program = argv[4];
 
-	queue = createQueue(nframes + 1);	
+	queue = createQueue(nframes);	
 	stack = createStack(nframes + 1);
 	
 	disk = disk_open("myvirtualdisk",npages);
@@ -181,9 +181,9 @@ int main( int argc, char *argv[] )
 
 	}
 	
-	printf("============page_table============\n");
-	page_table_print(pt);
-	printf("============page_table============\n");
+	//printf("============page_table============\n");
+	//page_table_print(pt);
+	//printf("============page_table============\n");
 	
 	printf("%d,%d,%d,%d\n", nframes, n_writes, n_reads, n_page_faults);
 	page_table_delete(pt);
@@ -205,7 +205,8 @@ void page_fault_handler( struct page_table *pt, int page) {
 
 	if (cnt == page && cnt < n_frames) {
 		push(stack, *frame);
-		enqueue(queue, *frame);
+		enqueue(queue, page);
+		//printf("frame: %d\n", page);
 		page_table_set_entry(pt, page, page, PROT_READ | PROT_WRITE);
 		frames[cnt] = page;
 		cnt++;
@@ -255,13 +256,16 @@ void page_fault_handler_fifo(struct page_table *pt, int page) {
 	int *frame = malloc(sizeof(int));
 	int *bits = malloc(sizeof(int));
 	int nframes = page_table_get_nframes(pt);
-	printf("page: %d\n", page);
-
+	if (page < nframes){
+		return;
+	}
+	//printf("page: %d\n", page);
+	
 	page_table_get_entry(pt, page, frame, bits);
 
 	char *physmem = page_table_get_physmem(pt);
 	int first_used_frame = dequeue(queue);
-	printf("first_used_frame: %d\n", first_used_frame);
+	//printf("first_used_frame: %d\n", first_used_frame);
 	enqueue(queue, first_used_frame);
 
 	push(stack, *frame);
@@ -280,7 +284,11 @@ void page_fault_handler_fifo(struct page_table *pt, int page) {
 void page_fault_handler_custom(struct page_table *pt, int page) {
 	int *frame = malloc(sizeof(int));
 	int *bits = malloc(sizeof(int));
+	int nframes = page_table_get_nframes(pt);
 	page_table_get_entry(pt, page, frame, bits);
+	if (page < nframes){
+		return;
+	}
 
 	char *physmem = page_table_get_physmem(pt);
 	int last_used_frame = pop(stack);
