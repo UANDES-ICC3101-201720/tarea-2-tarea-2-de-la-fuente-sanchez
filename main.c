@@ -181,10 +181,6 @@ int main( int argc, char *argv[] )
 
 	}
 	
-	//printf("============page_table============\n");
-	//page_table_print(pt);
-	//printf("============page_table============\n");
-	
 	printf("%d,%d,%d,%d\n", nframes, n_writes, n_reads, n_page_faults);
 	page_table_delete(pt);
 	disk_close(disk);
@@ -206,8 +202,7 @@ void page_fault_handler( struct page_table *pt, int page) {
 	if (cnt == page && cnt < n_frames) {
 		push(stack, *frame);
 		enqueue(queue, page);
-		//printf("frame: %d\n", page);
-		page_table_set_entry(pt, page, page, PROT_READ | PROT_WRITE);
+		page_table_set_entry(pt, page, page, PROT_READ | PROT_WRITE | PROT_EXEC);
 		frames[cnt] = page;
 		cnt++;
 		last_fault++;
@@ -244,9 +239,9 @@ void page_fault_handler_rand( struct page_table *pt, int page ) {
 	n_writes++;
 	disk_read(disk, page, &physmem[random_frame*BLOCK_SIZE]); //pagina que quiere ocupar el marco		
 	n_reads++;
+	page_table_set_entry(pt, frames[random_frame], random_frame, 0);
 	frames[random_frame] = page;
-	page_table_set_entry(pt, page, random_frame, PROT_READ | PROT_WRITE);
-	page_table_get_entry(pt, page, frame, bits);
+	page_table_set_entry(pt, page, random_frame, PROT_READ | PROT_WRITE | PROT_EXEC);
 
 	free(frame);
 	free(bits);	
@@ -259,24 +254,21 @@ void page_fault_handler_fifo(struct page_table *pt, int page) {
 	if (page < nframes){
 		return;
 	}
-	//printf("page: %d\n", page);
-
 	page_table_get_entry(pt, page, frame, bits);
 
 	char *physmem = page_table_get_physmem(pt);
 	int first_used_frame = dequeue(queue);
 	//printf("first_used_frame: %d\n", first_used_frame);
 	enqueue(queue, first_used_frame);
-	int the_page = frames[first_used_frame];
 
 	push(stack, *frame);
 	disk_write(disk, frames[first_used_frame], &physmem[first_used_frame*PAGE_SIZE]); //pagina que ocupa el marco
 	n_writes++;
 	disk_read(disk, page, &physmem[first_used_frame*BLOCK_SIZE]); //pagina que quiere ocupar el marco		
 	n_reads++;
+	page_table_set_entry(pt, frames[first_used_frame], first_used_frame, 0);
 	frames[first_used_frame] = page;
-	page_table_set_entry(pt, the_page, first_used_frame, 0);
-	page_table_set_entry(pt, page, first_used_frame, PROT_READ | PROT_WRITE);
+	page_table_set_entry(pt, page, first_used_frame, PROT_READ | PROT_WRITE | PROT_EXEC);
 	page_table_get_entry(pt, page, frame, bits);
 
 	free(frame);
@@ -304,8 +296,9 @@ void page_fault_handler_custom(struct page_table *pt, int page) {
 	n_writes++;
 	disk_read(disk, page, &physmem[last_used_frame*BLOCK_SIZE]); //pagina que quiere ocupar el marco		
 	n_reads++;
+	page_table_set_entry(pt, frames[last_used_frame], last_used_frame, 0);
 	frames[last_used_frame] = page;
-	page_table_set_entry(pt, page, last_used_frame, PROT_READ | PROT_WRITE);
+	page_table_set_entry(pt, page, last_used_frame, PROT_READ | PROT_WRITE | PROT_EXEC);
 	page_table_get_entry(pt, page, frame, bits);
 
 	last_fault = last_used_frame;
