@@ -39,26 +39,32 @@ data_files = { "rand-scan.txt": "",
 for file_ in data_files:
 	data_files[file_] = get_data(file_)
 
-nframes = []
-n_writes = []
-n_reads = []
-n_page_faults = []
-for data in data_files["fifo-focus.txt"]:
-	nframes.append(data[0])
-	n_writes.append(data[1])
-	n_reads.append(data[2])
-	n_page_faults.append(data[3])
-	print(data[0], data[1], data[2],data[3])
-# Create plots with pre-defined labels.
-fig, ax = plt.subplots()
-ax.plot(nframes, n_page_faults, 'b--', label='Page Faults')
-ax.plot(nframes, n_reads, 'r', label='Reads')
-ax.plot(nframes, n_writes, 'k:', label='Writes')
 
 
-legend = ax.legend(loc='upper center', shadow=True, fontsize='x-large')
+for key in data_files.keys():
+	nframes = []
+	n_writes = []
+	n_reads = []
+	n_page_faults = []
+	for data in data_files[key]:
+		nframes.append(data[0])
+		n_writes.append(data[1])
+		n_reads.append(data[2])
+		n_page_faults.append(data[3])
+		print(data[0], data[1], data[2],data[3])
+	# Create plots with pre-defined labels.
+	title = key.strip("txt").split("-")
+	fig, ax = plt.subplots()
+	ax.plot(nframes, n_page_faults, 'b--', label='Page Faults')
+	ax.plot(nframes, n_reads, 'r', label='Reads')
+	ax.plot(nframes, n_writes, 'k:', label='Writes')
 
-# Put a nicer background color on the legend.
-legend.get_frame()
 
-plt.show()
+	legend = ax.legend(loc='upper center', shadow=True, fontsize='x-large')
+
+	# Put a nicer background color on the legend.
+	legend.get_frame()
+	plt.ylabel("Quantity")
+	plt.xlabel("Frames")
+	plt.title(title[0].title() + " " + title[1].title())
+	plt.show()

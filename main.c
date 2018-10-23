@@ -100,7 +100,7 @@ int front(struct Queue* queue){
 }
 
 int rear(struct Queue* queue){
-	if (QueueIsEmpty)
+	if (QueueIsEmpty(queue))
 		return INT_MIN;
 	return queue->array[queue->rear];
 }
