@@ -24,6 +24,8 @@ for algoritm in algorithms:
 			string = "./virtmem 100 " + str(i) + " " + algoritm + " " + program + " >> " + algoritm + "-" + program + ".txt"
 			os.system(string)
 """
+
+
 data_files = { "rand-scan.txt": "",
 			   "fifo-scan.txt": "",
 			   "custom-scan.txt": "",

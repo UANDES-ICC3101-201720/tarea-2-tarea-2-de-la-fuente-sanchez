@@ -1,0 +1,198 @@
+focus result is -2589
+2,298,298,299
+focus result is -2589
+3,296,296,298
+focus result is -2589
+4,295,295,298
+focus result is -2589
+5,291,291,295
+focus result is -2589
+6,288,288,293
+focus result is -2589
+7,287,287,293
+focus result is -2589
+8,285,285,292
+focus result is -2589
+9,281,281,289
+focus result is -2589
+10,279,279,288
+focus result is -2589
+11,278,278,288
+focus result is -2589
+12,276,276,287
+focus result is -2589
+13,272,272,284
+focus result is -2589
+14,270,270,283
+focus result is -2589
+15,266,266,280
+focus result is -2589
+16,264,264,279
+focus result is -2589
+17,263,263,279
+focus result is -2589
+18,261,261,278
+focus result is -2589
+19,258,258,276
+focus result is -2589
+20,256,256,275
+focus result is -2589
+21,253,253,273
+focus result is -2589
+22,252,252,273
+focus result is -2589
+23,249,249,271
+focus result is -2589
+24,248,248,271
+focus result is -2589
+25,246,246,270
+focus result is -2589
+26,244,244,269
+focus result is -2589
+27,242,242,268
+focus result is -2589
+28,241,241,268
+focus result is -2589
+29,238,238,266
+focus result is -2589
+30,228,228,257
+focus result is -2589
+31,223,223,253
+focus result is -2589
+32,222,222,253
+focus result is -2589
+33,221,221,253
+focus result is -2589
+34,219,219,252
+focus result is -2589
+35,217,217,251
+focus result is -2589
+36,216,216,251
+focus result is -2589
+37,215,215,251
+focus result is -2589
+38,214,214,251
+focus result is -2589
+39,211,211,249
+focus result is -2589
+40,208,208,247
+focus result is -2589
+41,207,207,247
+focus result is -2589
+42,206,206,247
+focus result is -2589
+43,202,202,244
+focus result is -2589
+44,201,201,244
+focus result is -2589
+45,200,200,244
+focus result is -2589
+46,199,199,244
+focus result is -2589
+47,192,192,238
+focus result is -2589
+48,189,189,236
+focus result is -2589
+49,188,188,236
+focus result is -2589
+50,187,187,236
+focus result is -2589
+51,184,184,234
+focus result is -2589
+52,179,179,230
+focus result is -2589
+53,176,176,228
+focus result is -2589
+54,162,162,215
+focus result is -2589
+55,150,150,204
+focus result is -2589
+56,147,147,202
+focus result is -2589
+57,146,146,202
+focus result is -2589
+58,143,143,200
+focus result is -2589
+59,142,142,200
+focus result is -2589
+60,141,141,200
+focus result is -2589
+61,140,140,200
+focus result is -2589
+62,139,139,200
+focus result is -2589
+63,138,138,200
+focus result is -2589
+64,137,137,200
+focus result is -2589
+65,136,136,200
+focus result is -2589
+66,135,135,200
+focus result is -2589
+67,134,134,200
+focus result is -2589
+68,133,133,200
+focus result is -2589
+69,132,132,200
+focus result is -2589
+70,131,131,200
+focus result is -2589
+71,130,130,200
+focus result is -2589
+72,129,129,200
+focus result is -2589
+73,128,128,200
+focus result is -2589
+74,127,127,200
+focus result is -2589
+75,126,126,200
+focus result is -2589
+76,125,125,200
+focus result is -2589
+77,124,124,200
+focus result is -2589
+78,123,123,200
+focus result is -2589
+79,122,122,200
+focus result is -2589
+80,121,121,200
+focus result is -2589
+81,120,120,200
+focus result is -2589
+82,119,119,200
+focus result is -2589
+83,118,118,200
+focus result is -2589
+84,117,117,200
+focus result is -2589
+85,116,116,200
+focus result is -2589
+86,115,115,200
+focus result is -2589
+87,114,114,200
+focus result is -2589
+88,113,113,200
+focus result is -2589
+89,112,112,200
+focus result is -2589
+90,111,111,200
+focus result is -2589
+91,110,110,200
+focus result is -2589
+92,109,109,200
+focus result is -2589
+93,108,108,200
+focus result is -2589
+94,107,107,200
+focus result is -2589
+95,106,106,200
+focus result is -2589
+96,105,105,200
+focus result is -2589
+97,104,104,200
+focus result is -2589
+98,103,103,200
+focus result is -2589
+99,102,102,200
+focus result is -2589
+100,101,101,200

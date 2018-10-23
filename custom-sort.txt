@@ -1,0 +1,198 @@
+sort result is -305663
+2,2602,2602,2603
+sort result is -306564
+3,1867,1867,1869
+sort result is -308580
+4,1605,1605,1608
+sort result is -303149
+5,1418,1418,1422
+sort result is -304996
+6,1321,1321,1326
+sort result is -305598
+7,1223,1223,1229
+sort result is -311044
+8,1155,1155,1162
+sort result is -301886
+9,1089,1089,1097
+sort result is -303282
+10,1086,1086,1095
+sort result is -305425
+11,1030,1030,1040
+sort result is -304765
+12,997,997,1008
+sort result is -307761
+13,999,999,1011
+sort result is -302192
+14,962,962,975
+sort result is -302914
+15,902,902,916
+sort result is -308569
+16,893,893,908
+sort result is -300528
+17,859,859,875
+sort result is -313300
+18,857,857,874
+sort result is -308092
+19,816,816,834
+sort result is -321201
+20,814,814,833
+sort result is -307091
+21,781,781,801
+sort result is -305861
+22,755,755,776
+sort result is -307951
+23,744,744,766
+sort result is -312952
+24,750,750,773
+sort result is -302507
+25,734,734,758
+sort result is -308128
+26,703,703,728
+sort result is -305360
+27,711,711,737
+sort result is -306822
+28,673,673,700
+sort result is -303543
+29,684,684,712
+sort result is -301306
+30,646,646,675
+sort result is -302867
+31,644,644,674
+sort result is -304032
+32,638,638,669
+sort result is -303578
+33,651,651,683
+sort result is -304332
+34,622,622,655
+sort result is -307684
+35,600,600,634
+sort result is -301364
+36,593,593,628
+sort result is -308906
+37,587,587,623
+sort result is -305295
+38,569,569,606
+sort result is -310545
+39,558,558,596
+sort result is -308671
+40,570,570,609
+sort result is -312969
+41,541,541,581
+sort result is -312295
+42,551,551,592
+sort result is -311357
+43,534,534,576
+sort result is -312705
+44,505,505,548
+sort result is -309174
+45,532,532,576
+sort result is -308173
+46,492,492,537
+sort result is -309397
+47,485,485,531
+sort result is -304296
+48,482,482,529
+sort result is -306522
+49,461,461,509
+sort result is -310061
+50,477,477,526
+sort result is -314797
+51,447,447,497
+sort result is -319611
+52,415,415,466
+sort result is -306906
+53,436,436,488
+sort result is -302757
+54,425,425,478
+sort result is -314127
+55,415,415,469
+sort result is -306198
+56,420,420,475
+sort result is -311805
+57,400,400,456
+sort result is -309756
+58,395,395,452
+sort result is -144002
+59,402,402,460
+sort result is -308689
+60,370,370,429
+sort result is -418144
+61,355,355,415
+sort result is -302203
+62,337,337,398
+sort result is -309595
+63,307,307,369
+sort result is -310448
+64,329,329,392
+sort result is -307637
+65,330,330,394
+sort result is -311787
+66,297,297,362
+sort result is -477377
+67,304,304,370
+sort result is -304114
+68,288,288,355
+sort result is -304977
+69,298,298,366
+sort result is -311775
+70,306,306,375
+sort result is -305587
+71,264,264,334
+sort result is -310921
+72,249,249,320
+sort result is -727992
+73,239,239,311
+sort result is -770575
+74,238,238,311
+sort result is -310727
+75,231,231,305
+sort result is -311357
+76,223,223,298
+sort result is -311357
+77,211,211,287
+sort result is -311357
+78,207,207,284
+sort result is -311357
+79,221,221,299
+sort result is -307890
+80,193,193,272
+sort result is -306087
+81,192,192,272
+sort result is -638472
+82,181,181,262
+sort result is -467139
+83,162,162,244
+sort result is -311357
+84,165,165,248
+sort result is -315592
+85,133,133,217
+sort result is -311357
+86,136,136,221
+sort result is -308211
+87,140,140,226
+sort result is -311357
+88,102,102,189
+sort result is -311357
+89,111,111,199
+sort result is -315023
+90,93,93,182
+sort result is -308514
+91,98,98,188
+sort result is -311357
+92,82,82,173
+sort result is -676457
+93,78,78,170
+sort result is -306936
+94,47,47,140
+sort result is -311357
+95,52,52,146
+sort result is -644880
+96,50,50,145
+sort result is -311357
+97,36,36,132
+sort result is -309009
+98,21,21,118
+sort result is -311357
+99,15,15,113
+sort result is -311357
+100,8,8,107

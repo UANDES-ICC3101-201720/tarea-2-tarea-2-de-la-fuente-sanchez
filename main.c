@@ -181,10 +181,6 @@ int main( int argc, char *argv[] )
 
 	}
 	
-	//printf("============page_table============\n");
-	//page_table_print(pt);
-	//printf("============page_table============\n");
-	
 	printf("%d,%d,%d,%d\n", nframes, n_writes, n_reads, n_page_faults);
 	page_table_delete(pt);
 	disk_close(disk);
@@ -206,7 +202,6 @@ void page_fault_handler( struct page_table *pt, int page) {
 	if (cnt == page && cnt < n_frames) {
 		push(stack, *frame);
 		enqueue(queue, page);
-		//printf("frame: %d\n", page);
 		page_table_set_entry(pt, page, page, PROT_READ | PROT_WRITE | PROT_EXEC);
 		frames[cnt] = page;
 		cnt++;
@@ -247,7 +242,6 @@ void page_fault_handler_rand( struct page_table *pt, int page ) {
 	page_table_set_entry(pt, frames[random_frame], random_frame, 0);
 	frames[random_frame] = page;
 	page_table_set_entry(pt, page, random_frame, PROT_READ | PROT_WRITE | PROT_EXEC);
-	//page_table_get_entry(pt, page, frame, bits);
 
 	free(frame);
 	free(bits);	
@@ -256,12 +250,7 @@ void page_fault_handler_rand( struct page_table *pt, int page ) {
 void page_fault_handler_fifo(struct page_table *pt, int page) {
 	int *frame = malloc(sizeof(int));
 	int *bits = malloc(sizeof(int));
-	int nframes = page_table_get_nframes(pt);
-	/*
-	if (page < nframes){
-		return;
-	}*/
-	//printf("page: %d\n", page);
+	//int nframes = page_table_get_nframes(pt);
 	
 	page_table_get_entry(pt, page, frame, bits);
 
@@ -278,7 +267,6 @@ void page_fault_handler_fifo(struct page_table *pt, int page) {
 	page_table_set_entry(pt, frames[first_used_frame], first_used_frame, 0);
 	frames[first_used_frame] = page;
 	page_table_set_entry(pt, page, first_used_frame, PROT_READ | PROT_WRITE | PROT_EXEC);
-	//page_table_get_entry(pt, page, frame, bits);
 
 	free(frame);
 	free(bits);
@@ -287,11 +275,9 @@ void page_fault_handler_fifo(struct page_table *pt, int page) {
 void page_fault_handler_custom(struct page_table *pt, int page) {
 	int *frame = malloc(sizeof(int));
 	int *bits = malloc(sizeof(int));
-	int nframes = page_table_get_nframes(pt);
+	//int nframes = page_table_get_nframes(pt);
 	page_table_get_entry(pt, page, frame, bits);
-	if (page < nframes){
-		return;
-	}
+
 
 	char *physmem = page_table_get_physmem(pt);
 	int last_used_frame = pop(stack);
