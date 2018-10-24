@@ -251,9 +251,7 @@ void page_fault_handler_fifo(struct page_table *pt, int page) {
 	int *frame = malloc(sizeof(int));
 	int *bits = malloc(sizeof(int));
 	int nframes = page_table_get_nframes(pt);
-	if (page < nframes){
-		return;
-	}
+
 	page_table_get_entry(pt, page, frame, bits);
 
 	char *physmem = page_table_get_physmem(pt);
@@ -280,9 +278,6 @@ void page_fault_handler_custom(struct page_table *pt, int page) {
 	int *bits = malloc(sizeof(int));
 	int nframes = page_table_get_nframes(pt);
 	page_table_get_entry(pt, page, frame, bits);
-	if (page < nframes){
-		return;
-	}
 
 	char *physmem = page_table_get_physmem(pt);
 	int last_used_frame = pop(stack);
